@@ -12,7 +12,7 @@ impl<T> Summary<T>
 where
     T: Average + Clone,
 {
-    pub fn write_headers(prefix: &str, writer: impl Write) -> std::io::Result<()> {
+    pub fn write_headers(prefix: &str, mut writer: impl Write) -> std::io::Result<()> {
         write!(writer, "{0}avg,{0}min,{0}max,{0}low,{0}med,{0}up,", prefix)
     }
 
@@ -42,13 +42,13 @@ where
         }
     }
 
-    pub fn to_writer(&self, writer: impl Write) -> std::io::Result<()> 
+    pub fn to_writer(&self, mut writer: impl Write) -> std::io::Result<()> 
     where
         T: std::fmt::Display,
     {
-        let min = self.min.unwrap_or(T::zero());
-        let max = self.max.unwrap_or(T::zero());
-        let [low, med, up] = self.quartiles.unwrap_or([T::zero(), T::zero(), T::zero()]);
+        let min = self.min.clone().unwrap_or(T::zero());
+        let max = self.max.clone().unwrap_or(T::zero());
+        let [low, med, up] = self.quartiles.clone().unwrap_or([T::zero(), T::zero(), T::zero()]);
 
         write!(writer, "{},{},{},{},{},{}", self.avg, min, max, low, med, up)
     }

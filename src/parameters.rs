@@ -122,7 +122,7 @@ impl Parameters {
         Ok(())
     }
 
-    pub fn write_headers(&self, f: &mut impl std::io::Write) -> std::io::Result<()> {
+    pub fn write_headers(&self, mut writer: impl std::io::Write) -> std::io::Result<()> {
         let mut params = Vec::with_capacity(self.param_list.len());
 
         for _ in 0..self.param_list.len() {
@@ -134,16 +134,16 @@ impl Parameters {
         }
 
         for param in params.into_iter() {
-            write!(f, "{},", param.unwrap())?;
+            write!(writer, "{},", param.unwrap())?;
         }
         Ok(())
     }
 
-    pub fn write_as_line(&self, f: &mut impl std::io::Write) -> std::io::Result<()> {
+    pub fn write_as_line(&self, mut writer: impl std::io::Write) -> std::io::Result<()> {
         for value in self.current.iter() {
             match value {
-                Some(value) => write!(f, "{},", value)?,
-                None => write!(f, ",")?,
+                Some(value) => write!(writer, "{},", value)?,
+                None => write!(writer, ",")?,
             }
         }
 
