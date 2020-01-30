@@ -43,9 +43,7 @@ where
             quartiles
         }
     }
-}
 
-impl<T> Summary<T> {
     pub fn to_writer(&self, mut writer: impl Write) -> std::io::Result<()> 
     where
         T: std::fmt::Display,
