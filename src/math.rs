@@ -42,7 +42,6 @@ where
 
 pub fn quartiles<T, O, F, U>(values: &mut [T], compare: F, mut combine: U) -> Option<[O; 3]> 
 where
-    T: std::fmt::Debug,
     F: FnMut(&T, &T) -> Ordering,
     U: FnMut(&T, Option<&T>) -> O,
 {
