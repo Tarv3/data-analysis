@@ -1,4 +1,4 @@
-use std::{ops::{Div, Add}, cmp::Ordering};
+use std::cmp::Ordering;
 
 pub fn reduce<U, T, F>(
     values: impl Iterator<Item = T>, 
