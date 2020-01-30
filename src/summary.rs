@@ -50,6 +50,6 @@ where
         let max = self.max.unwrap_or(T::zero());
         let [low, med, up] = self.quartiles.unwrap_or([T::zero(), T::zero(), T::zero()]);
 
-        write!(writer, "{},{},{},{},{},{}", self.avg, min, max, low, med, up);
+        write!(writer, "{},{},{},{},{},{}", self.avg, min, max, low, med, up)
     }
 }
