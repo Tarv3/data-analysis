@@ -1,6 +1,10 @@
 use crate::average::*;
 use std::{ cmp::Ordering, io::Write };
 
+pub fn write_summary_headers(prefix: &str, mut writer: impl Write) -> std::io::Result<()> {
+    write!(writer, "{0}avg,{0}min,{0}max,{0}low,{0}med,{0}up,", prefix)
+}
+
 pub struct Summary<T> {
     pub avg: T,
     pub min: Option<T>,
@@ -12,9 +16,7 @@ impl<T> Summary<T>
 where
     T: Average + Clone,
 {
-    pub fn write_headers(prefix: &str, mut writer: impl Write) -> std::io::Result<()> {
-        write!(writer, "{0}avg,{0}min,{0}max,{0}low,{0}med,{0}up,", prefix)
-    }
+    
 
     pub fn from_iter<O>(values: impl Iterator<Item = T>, mut ordering: O) -> Summary<T>
     where
@@ -41,7 +43,9 @@ where
             quartiles
         }
     }
+}
 
+impl<T> Summary<T> {
     pub fn to_writer(&self, mut writer: impl Write) -> std::io::Result<()> 
     where
         T: std::fmt::Display,
