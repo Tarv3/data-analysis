@@ -1,4 +1,5 @@
-use std::{error::Error, path::Path, fmt::Display, collections::HashMap};
+use std::{error::Error, fmt::Display, collections::HashMap};
+use serde::Deserialize;
 
 #[derive(Copy, Clone, Debug)]
 pub struct ParamAlreadyExists;
@@ -84,7 +85,7 @@ impl Parameters {
         let middle = input.find(|a: char| a.is_alphabetic()).unwrap();
 
         let (value, parameter) = input.split_at(middle);
-        let mut value = value.replace('_', ".");
+        let value = value.replace('_', ".");
 
         if let Some(Parameter { pos, _type, .. }) = self.param_list.get(parameter) {
             let value = match _type {
