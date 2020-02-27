@@ -4,6 +4,7 @@ pub trait Average: Sized {
     fn zero() -> Self;
     fn add(&mut self, b: Self);
     fn divide(&mut self, count: u32);
+    fn diff_sqrd(&self, b: &Self) -> Self;
 
     fn average(values: impl Iterator<Item = Self>) -> Self {
         let mut initial = Self::zero();
@@ -19,6 +20,24 @@ pub trait Average: Sized {
 
         initial
     }
+
+    fn variance(average: &Self, values: impl Iterator<Item = Self>) -> Self {
+        let mut initial = Self::zero();
+        let mut count = 0;
+
+        for value in values {
+            initial.add(value.diff_sqrd(average));
+            count += 1;
+        }
+
+        if count >= 1 {
+            count -= 1;
+            initial.divide(count);
+            return initial;
+        }
+
+        Self::zero()
+    }
 }
 
 impl Average for f32 {
@@ -33,6 +52,12 @@ impl Average for f32 {
     fn divide(&mut self, count: u32) {
         *self /= count as f32;
     }
+
+    fn diff_sqrd(&self, b: &f32) -> f32 {
+        let dif = self - b;
+
+        dif * dif
+    } 
 }
 
 impl Average for f64 {
@@ -47,6 +72,12 @@ impl Average for f64 {
     fn divide(&mut self, count: u32) {
         *self /= count as f64;
     }
+
+    fn diff_sqrd(&self, b: &f64) -> f64 {
+        let dif = self - b;
+
+        dif * dif
+    } 
 }
 
 impl Average for i64 {
@@ -61,6 +92,12 @@ impl Average for i64 {
     fn divide(&mut self, count: u32) {
         *self /= count as i64;
     }
+
+    fn diff_sqrd(&self, b: &i64) -> i64 {
+        let dif = self - b;
+
+        dif * dif
+    } 
 }
 
 pub fn moving_average<T: Average + Clone>(width: usize, mut values: impl Iterator<Item = T>) -> Option<impl Iterator<Item = T>> {
