@@ -2,7 +2,7 @@ use crate::average::*;
 use std::{ cmp::Ordering, io::Write };
 
 pub fn write_summary_headers(prefix: &str, mut writer: impl Write) -> std::io::Result<()> {
-    write!(writer, "{0}avg,{0}min,{0}max,{0}low,{0}med,{0}up,", prefix)
+    write!(writer, "{0}avg,{0}var,{0}min,{0}max,{0}low,{0}med,{0}up,", prefix)
 }
 
 pub struct Summary<T> {
@@ -53,6 +53,6 @@ where
         let max = self.max.clone().unwrap_or(T::zero());
         let [low, med, up] = self.quartiles.clone().unwrap_or([T::zero(), T::zero(), T::zero()]);
 
-        write!(writer, "{},{},{},{},{},{}", self.avg, min, max, low, med, up)
+        write!(writer, "{},{},{},{},{},{},{}", self.avg, self.variance, min, max, low, med, up)
     }
 }
